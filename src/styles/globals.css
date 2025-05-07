@@ -14,51 +14,62 @@ body {
   color: var(--color-text-primary);
   background-color: var(--color-background);
   -webkit-tap-highlight-color: transparent;
-  overflow: hidden;
+  overflow: hidden; /* 全体のスクロールはチャットエリアで行うため */
 }
 
-#root {
+#root, .h-full-flex-col {
   height: 100%;
   width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 /* モバイルでの入力フィールドのズーム防止 */
-input, button {
-  font-size: 16px;
+input,
+button,
+textarea {
+  font-size: 16px; /* iOSでズームさせないための最小フォントサイズ */
 }
 
 /* アニメーション */
 @keyframes pulse {
-  0% { opacity: 0.6; }
+  0%, 100% { opacity: 0.7; }
   50% { opacity: 1; }
-  100% { opacity: 0.6; }
 }
 
 .animate-pulse {
-  animation: pulse 1.5s ease-in-out infinite;
+  animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-/* スクロールバースタイル */
+/* スクロールバースタイル (よりモダンに) */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-background-alt);
+  background: transparent; /* トラックは基本的に透明に */
 }
 
 ::-webkit-scrollbar-thumb {
   background: var(--color-secondary-light);
-  border-radius: 3px;
+  border-radius: var(--border-radius-full);
+  border: 2px solid var(--color-background); /* スクロールバーのthumbに背景色と同じ色のボーダーを追加 */
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-secondary);
 }
 
+/* Firefox向けスクロールバー */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-secondary-light) transparent;
+}
+
 /* ユーティリティクラス */
 .safe-bottom {
-  padding-bottom: env(safe-area-inset-bottom, 0);
+  padding-bottom: env(safe-area-inset-bottom, 1rem); /* デフォルトのフォールバック値を少し増やす */
 }
 
 .fixed-container {
@@ -66,13 +77,15 @@ input, button {
   left: 0;
   right: 0;
   z-index: 10;
-  background-color: var(--color-surface);
+  background-color: var(--color-surface); /* variables.cssから参照 */
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px 0 rgba(0, 0, 0, 0.02); /* 微妙な影を追加 */
 }
 
+/* ChatHeaderとChatInputエリアが重ならないようにpadding-topとpadding-bottomをLayout側で制御することを想定 */
 .chat-area-container {
-  height: calc(100% - var(--header-height) - var(--input-bar-height) - 1rem);
-  padding-bottom: 1.5rem;
+  flex-grow: 1; /* Flexboxで高さを自動調整 */
   overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-secondary-light) var(--color-background-alt);
+  padding: var(--spacing-md);
+  padding-bottom: var(--spacing-lg); /* 入力エリアとのスペースを確保 */
+  background-color: var(--color-background);
 }

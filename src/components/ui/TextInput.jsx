@@ -18,17 +18,35 @@ const TextInput = forwardRef(({
       type="text"
       className={`
         w-full px-4 py-3 
-        border border-slate-300 rounded-full 
-        text-slate-800 placeholder-slate-400
-        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-        disabled:opacity-60 disabled:bg-slate-50
+        border rounded-full
+        text-base
+        transition-colors duration-200 ease-in-out
+        focus:outline-none focus:ring-2 
         ${className}
       `}
-      value={value}
-      onChange={onChange}
+      style={{
+        backgroundColor: disabled ? "var(--color-background-alt)" : "var(--color-surface)",
+        color: disabled ? "var(--color-text-disabled)" : "var(--color-text-primary)",
+        borderColor: "var(--color-border)",
+        borderRadius: "var(--border-radius-full)", 
+        placeholderColor: "var(--color-text-placeholder)",
+        opacity: disabled ? 0.6 : 1,
+        boxShadow: disabled ? "none" : "0 1px 2px 0 rgba(0,0,0,0.03)",
+        lineHeight: '1.5', // Ensure text is vertically centered
+      }}
       placeholder={placeholder}
       disabled={disabled}
       onKeyDown={onKeyDown}
+      value={value}
+      onChange={onChange}
+      onFocus={(e) => {
+        e.target.style.borderColor = "var(--color-border-focus)";
+        e.target.style.boxShadow = `0 0 0 2px var(--color-primary-light), 0 1px 2px 0 rgba(0,0,0,0.03)`;
+      }}
+      onBlur={(e) => {
+        e.target.style.borderColor = "var(--color-border)";
+        e.target.style.boxShadow = "0 1px 2px 0 rgba(0,0,0,0.03)";
+      }}
       {...props}
     />
   );

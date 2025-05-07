@@ -31,14 +31,23 @@ export default function ChatPage() {
       />
       
       {/* 入力コントロールエリア */}
-      <div className="fixed-container bottom-0 py-4 px-5 mb-2 mx-2 border border-slate-200 rounded-xl bg-white shadow-sm safe-bottom">
-        <SessionController
-          isSessionActive={isSessionActive}
-          status={status}
-          startSession={startSession}
-          stopSession={stopSession}
-          sendTextMessage={sendTextMessage}
-        />
+      <div 
+        className="fixed-container bottom-0 z-20 p-3 safe-bottom"
+        style={{ 
+          backgroundColor: "var(--color-surface)",
+          borderTop: `1px solid var(--color-border-light)`,
+          boxShadow: "0 -2px 5px rgba(0,0,0,0.03)"
+        }}
+      >
+        <div className="max-w-2xl mx-auto"> {/* 中央揃えのためのコンテナ */}
+          <SessionController
+            isSessionActive={isSessionActive}
+            status={status}
+            startSession={startSession}
+            stopSession={stopSession}
+            sendTextMessage={sendTextMessage}
+          />
+        </div>
       </div>
     </Layout>
   );

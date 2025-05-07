@@ -6,7 +6,7 @@ import Button from "../ui/Button";
 /**
  * チャットの入力フィールドコンポーネント
  */
-export default function ChatInput({ onSendMessage, disabled = false }) {
+export default function ChatInput({ onSendMessage, disabled = false, placeholder = "メッセージを入力..." }) {
   const [message, setMessage] = useState("");
   const inputRef = useRef(null);
 
@@ -26,7 +26,7 @@ export default function ChatInput({ onSendMessage, disabled = false }) {
         ref={inputRef}
         value={message}
         onChange={(e) => setMessage(e.target.value)}
-        placeholder="メッセージを入力..."
+        placeholder={placeholder}
         disabled={disabled}
         onKeyDown={(e) => {
           if (e.key === "Enter" && !e.shiftKey && message.trim() && !disabled) {
