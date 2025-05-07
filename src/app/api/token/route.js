@@ -3,13 +3,22 @@ import path from 'path';
 import fs from 'fs';
 
 // AIインストラクション設定を読み込む
-const instructionsPath = path.join(process.cwd(), 'config', 'instructions.json');
+const instructionsPath = path.join(process.cwd(), 'public', 'config', 'instructions.json');
 const instructionsConfig = JSON.parse(
   fs.readFileSync(instructionsPath, 'utf-8')
 );
 
-export async function GET() {
+export async function GET(request) {
   try {
+    const url = new URL(request.url);
+    const themeName = url.searchParams.get('theme') || instructionsConfig.defaultTheme;
+    const selectedInstructions = instructionsConfig.themes[themeName] || instructionsConfig.themes[instructionsConfig.defaultTheme];
+
+    if (!selectedInstructions) {
+      console.error("適切なインストラクションが見つかりませんでした。テーマ:", themeName);
+      return NextResponse.json({ error: "Failed to get appropriate instructions" }, { status: 400 });
+    }
+
     const response = await fetch(
       "https://api.openai.com/v1/realtime/sessions",
       {
@@ -21,7 +30,7 @@ export async function GET() {
         body: JSON.stringify({
           model: "gpt-4o-realtime-preview-2024-12-17",
           voice: "shimmer",
-          instructions: instructionsConfig.instructions,
+          instructions: selectedInstructions,
         }),
       },
     );

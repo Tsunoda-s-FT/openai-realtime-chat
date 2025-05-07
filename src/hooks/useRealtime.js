@@ -11,13 +11,22 @@ export default function useRealtime() {
   const [dataChannel, setDataChannel] = useState(null);
   const peerConnection = useRef(null);
   const audioElement = useRef(null);
+  const [currentTheme, setCurrentTheme] = useState(null);
 
   // セッション開始
-  async function startSession() {
+  async function startSession(themeName) {
+    if (!themeName) {
+      console.error("テーマ名が指定されていません。");
+      setStatus("error");
+      return;
+    }
+    setCurrentTheme(themeName);
+    setMessages([]);
+    setEvents([]);
     setStatus("connecting");
     try {
       // サーバーからの一時的なトークンを取得
-      const tokenResponse = await fetch("/api/token");
+      const tokenResponse = await fetch(`/api/token?theme=${encodeURIComponent(themeName)}`);
       const data = await tokenResponse.json();
       const EPHEMERAL_KEY = data.client_secret.value;
 
@@ -293,6 +302,7 @@ export default function useRealtime() {
     messages,
     status,
     events,
+    currentTheme,
     startSession,
     stopSession,
     sendTextMessage

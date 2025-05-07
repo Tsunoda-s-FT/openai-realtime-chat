@@ -83,8 +83,8 @@ textarea {
 
 /* ChatHeaderとChatInputエリアが重ならないようにpadding-topとpadding-bottomをLayout側で制御することを想定 */
 .chat-area-container {
-  flex-grow: 1; /* Flexboxで高さを自動調整 */
-  overflow-y: auto;
+  /* flex-grow: 1; */ /* Flexboxで高さを自動調整 */
+  /* overflow-y: auto; */
   padding: var(--spacing-md);
   padding-bottom: var(--spacing-lg); /* 入力エリアとのスペースを確保 */
   background-color: var(--color-background);

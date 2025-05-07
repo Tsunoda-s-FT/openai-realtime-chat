@@ -12,9 +12,12 @@ export default function ChatContainer({ messages, status }) {
   // 新しいメッセージが来たら自動スクロール
   useEffect(() => {
     if (containerRef.current) {
-      containerRef.current.scrollTop = containerRef.current.scrollHeight;
+      const mainScroller = containerRef.current.closest('main');
+      if (mainScroller) {
+        mainScroller.scrollTop = mainScroller.scrollHeight;
+      }
     }
-  }, [messages, status]);
+  }, [messages]);
 
   return (
     <div 
