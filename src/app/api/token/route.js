@@ -28,7 +28,7 @@ export async function GET(request) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: "gpt-4o-realtime-preview-2024-12-17",
+          model: "gpt-4o-realtime-preview",
           voice: "shimmer",
           instructions: selectedInstructions,
         }),
